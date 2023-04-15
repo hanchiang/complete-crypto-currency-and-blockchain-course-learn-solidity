@@ -1,3 +1,5 @@
+pragma solidity >= 0.5.0 < 0.9.0;
+
 contract Arrays {
     uint[5] public arrayFixedSize;
     uint[] public arrayDynamicSize;

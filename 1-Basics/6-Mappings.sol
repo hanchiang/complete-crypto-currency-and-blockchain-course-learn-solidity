@@ -1,3 +1,5 @@
+pragma solidity >= 0.5.0 < 0.9.0;
+
 contract Mapping {
     mapping(address => bool) public myAddressBoolMap;
     mapping(address => uint) public myAddressBalanceMap;

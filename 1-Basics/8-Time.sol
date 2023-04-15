@@ -1,3 +1,5 @@
+pragma solidity >= 0.5.0 < 0.9.0;
+
 contract Time {
     uint biddingStartTs = block.timestamp;
     uint biddingDays = 10 days;
