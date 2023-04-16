@@ -13,6 +13,9 @@ contract ThreeInARow {
 
     event PlayerJoined(address _player);
     event NextPlayer(address _player);
+    event GameOverWithWin(address _winner);
+    event GameOverWithDraw();
+    event PayoutSuccess(address receiver, uint _amountInWei);
 
     address[3][3] gameBoard;
     bool gameActive;
@@ -21,6 +24,9 @@ contract ThreeInARow {
 
     uint balanceToWithdrawPlayer1;
     uint balanceToWithdrawPlayer2;
+
+    uint gameValidUntil;
+    uint timeToReact = 3 minutes;
 
     constructor(address _gameManager, address payable _player1) public payable {
         gameManager = GameManager(_gameManager);
@@ -45,6 +51,7 @@ contract ThreeInARow {
         }
 
         gameActive = true;
+        gameValidUntil = block.timestamp + timeToReact;
         emit NextPlayer(activePlayer);
     }
 
@@ -55,6 +62,7 @@ contract ThreeInARow {
     function setStone(uint8 row, uint col) public {
         uint8 boardSize = uint8(gameBoard.length);
         assert(gameActive);
+        require(gameValidUntil >= block.timestamp);
         require(row >= 0 && row < boardSize, "Invalid row coordinate");
         require(col >= 0 && col < boardSize, "Invalid y coordinate");
         require(gameBoard[row][col] == address(0x0), "Cannot set a stone that is already set!");
@@ -120,7 +128,9 @@ contract ThreeInARow {
     }
 
     function setWinner(address payable _player) private {
+        require(gameActive);
         gameActive = false;
+        gameManager.enterWinner(_player);
         uint balanceToPayout = address(this).balance;
         if (!_player.send(balanceToPayout)) {
             if (_player == player1) {
@@ -128,35 +138,49 @@ contract ThreeInARow {
             } else if (_player == player2) {
                 balanceToWithdrawPlayer2 += balanceToPayout;
             }
+        } else {
+            emit PayoutSuccess(_player, balanceToPayout);
         }
+        emit GameOverWithWin(_player);
     }
 
     function setDraw() private {
+        require(gameActive);
         gameActive = false;
         uint balanceToPayout = address(this).balance / 2;
         if (!player1.send(balanceToPayout)) {
             balanceToWithdrawPlayer1 += balanceToPayout;
+        } else {
+            emit PayoutSuccess(player1, balanceToPayout);
         }
         if (!player2.send(balanceToPayout)) {
             balanceToWithdrawPlayer2 += balanceToPayout;
+        } else {
+            emit PayoutSuccess(player2, balanceToPayout);
         }
+
+        emit GameOverWithDraw();
     }
 
-    function withdrawWin(address payable _to) public {
+    function withdraw(address payable _to) public {
         if (msg.sender == player1) {
             require(balanceToWithdrawPlayer1 > 0);
             uint balanceToWithdraw = balanceToWithdrawPlayer1;
             balanceToWithdrawPlayer1 = 0;
             _to.transfer(balanceToWithdraw);
+            emit PayoutSuccess(player1, balanceToWithdraw);
         } else if (msg.sender == player2) {
             require(balanceToWithdrawPlayer2 > 0);
             uint balanceToWithdraw = balanceToWithdrawPlayer2;
             balanceToWithdrawPlayer2 = 0;
             _to.transfer(balanceToWithdraw);
+            emit PayoutSuccess(player2, balanceToWithdraw);
         }
     }
 
     function emergencyCashout() public {
-
+        require(gameValidUntil < block.timestamp);
+        require(gameActive);
+        setDraw();
     }
 }
