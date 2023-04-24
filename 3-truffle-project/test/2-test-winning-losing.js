@@ -23,6 +23,8 @@ contract('ThreeInARow test win', (accounts) => {
 
         // win
         assert.equal('PayoutSuccess', txReceiptPlayed.logs[0].event);
+        assert.equal(winningPlayer, txReceiptPlayed.logs[0].args._receiver);
+        assert.equal(web3.utils.toWei('0.2', 'ether'), txReceiptPlayed.logs[0].args._amountInWei);
         assert.equal('GameOverWithWin', txReceiptPlayed.logs[1].event);
         assert.equal(txReceiptPlayed.logs[1].args._winner, winningPlayer);
 
@@ -55,6 +57,8 @@ contract('ThreeInARow test win', (accounts) => {
 
         // win
         assert.equal('PayoutSuccess', txReceiptPlayed.logs[0].event);
+        assert.equal(winningPlayer, txReceiptPlayed.logs[0].args._receiver);
+        assert.equal(web3.utils.toWei('0.2', 'ether'), txReceiptPlayed.logs[0].args._amountInWei);
         assert.equal('GameOverWithWin', txReceiptPlayed.logs[1].event);
         assert.equal(txReceiptPlayed.logs[1].args._winner, winningPlayer);
 
@@ -87,6 +91,8 @@ contract('ThreeInARow test win', (accounts) => {
 
         // win
         assert.equal('PayoutSuccess', txReceiptPlayed.logs[0].event);
+        assert.equal(winningPlayer, txReceiptPlayed.logs[0].args._receiver);
+        assert.equal(web3.utils.toWei('0.2', 'ether'), txReceiptPlayed.logs[0].args._amountInWei);
         assert.equal('GameOverWithWin', txReceiptPlayed.logs[1].event);
         assert.equal(txReceiptPlayed.logs[1].args._winner, winningPlayer);
 
@@ -119,6 +125,8 @@ contract('ThreeInARow test win', (accounts) => {
 
         // win
         assert.equal('PayoutSuccess', txReceiptPlayed.logs[0].event);
+        assert.equal(winningPlayer, txReceiptPlayed.logs[0].args._receiver);
+        assert.equal(web3.utils.toWei('0.2', 'ether'), txReceiptPlayed.logs[0].args._amountInWei);
         assert.equal('GameOverWithWin', txReceiptPlayed.logs[1].event);
         assert.equal(txReceiptPlayed.logs[1].args._winner, winningPlayer);
 
