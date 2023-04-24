@@ -15,7 +15,7 @@ contract ThreeInARow {
     event NextPlayer(address _player);
     event GameOverWithWin(address _winner);
     event GameOverWithDraw();
-    event PayoutSuccess(address receiver, uint _amountInWei);
+    event PayoutSuccess(address _receiver, uint _amountInWei);
 
     address[3][3] gameBoard;
     bool gameActive;
