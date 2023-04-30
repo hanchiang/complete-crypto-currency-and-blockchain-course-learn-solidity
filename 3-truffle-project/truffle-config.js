@@ -103,6 +103,11 @@ module.exports = {
     // timeout: 100000
   },
 
+  solidityLog: {
+    displayPrefix: ' :', // defaults to ""
+    preventConsoleLogMigration: true, // defaults to false
+  },
+
   // Configure your compilers
   compilers: {
     solc: {

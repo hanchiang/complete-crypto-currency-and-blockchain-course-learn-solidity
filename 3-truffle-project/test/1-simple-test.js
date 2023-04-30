@@ -5,11 +5,9 @@ const ThreeInARow = artifacts.require('ThreeInARow');
 // Run test: truffle test
 contract('ThreeInARow test', (accounts) => {
     it('should have an empty game board at the beginning', async () => {
-        console.log(accounts);
         const gameManager = await GameManager.deployed();
         // { tx, receipt, logs }
         const txReceipt = await gameManager.startNewGame({ value: web3.utils.toWei('0.1', 'ether') });
-        console.log(txReceipt);
         const threeInARow = await ThreeInARow.at(txReceipt.logs[0].args._game);
 
         const board = await threeInARow.getBoard();

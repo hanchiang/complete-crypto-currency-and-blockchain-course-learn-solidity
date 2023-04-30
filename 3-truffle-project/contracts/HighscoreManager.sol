@@ -32,50 +32,51 @@ contract HighscoreManager {
 
         emit NewWinAdded(_winner, highscoreMapping[_winner].numberOfWins);
 
+        // update highscore holder
         if (highscoreHolder == address(0x0)) {
             highscoreHolder = _winner;
             return;
         }
-        
-        // update top 10 list
         if (highscoreHolder == _winner) {
             return;
         }
+
+        // update winner list
         address currentPosition = highscoreHolder;
-        uint count = 0;
-
         for (uint i = 0; i < NUM_HIGH_SCORES; i++) {
+            // not yet added to the highscore list
+            // TODO: Maintain a tail pointer for convenience
+            if (i < NUM_HIGH_SCORES - 1 && highscoreMapping[currentPosition].next == address(0) &&
+                highscoreMapping[_winner].prev == address(0) && highscoreMapping[_winner].next == address(0)
+            ) {
+                highscoreMapping[currentPosition].next = _winner;
+                highscoreMapping[_winner].prev = currentPosition;
+                return;
+            }
             if (highscoreMapping[currentPosition].numberOfWins < highscoreMapping[_winner].numberOfWins) {
-                // _winner is not in the list - add to the last element
-                // before: 1-2, after: 1-3
-                if (count == NUM_HIGH_SCORES - 1) {
-                    highscoreMapping[_winner].prev = highscoreMapping[currentPosition].prev;
+                // winner is the 2nd position
+                // before: 1(10)-2(10)-3(9), after: 2(11)-1(10)-3(9)
+
+                // winner is the last position
+                // before: 1(11)-2(10)-3(10), after: 1(11)-3(11)-2(10)
+
+                // winner is the last position, and move up a few positions
+                // before 1(10)-2(6)-3(6)-4(6), after: 1(10)-4(7)-2(6)-3(6)
+
+                // connect current's prev to winner
+                if (highscoreMapping[currentPosition].prev != address(0x0)) {
                     highscoreMapping[highscoreMapping[currentPosition].prev].next = _winner;
-                    highscoreMapping[currentPosition].prev = address(0x0);
-                } else {
-                    // winner is in the list
-                    // before: 1-2, after: 2-1
-                    // before: 1-2-3, after: 1-3-2
-                    // before: 1-2-3-4, after: 1-3-2-4
-
-                    // connect current's prev to winner
-                    if (highscoreMapping[currentPosition].prev != address (0x0)) {
-                        highscoreMapping[highscoreMapping[currentPosition].prev].next = _winner;
-                        highscoreMapping[_winner].prev = highscoreMapping[currentPosition].prev;
-                    }
-
-                    // connect winner's next to current
-                    if (highscoreMapping[_winner].next != address(0x0)) {
-                        highscoreMapping[highscoreMapping[_winner].next].prev = currentPosition;
-                        highscoreMapping[currentPosition].next = highscoreMapping[_winner].next;
-                    }
-
-                    // update current and winner direction
-                    highscoreMapping[_winner].prev = highscoreMapping[currentPosition].prev;
-                    highscoreMapping[currentPosition].prev = _winner;
-                    highscoreMapping[currentPosition].next = highscoreMapping[_winner].next;
-                    highscoreMapping[_winner].next = currentPosition;
                 }
+                // connect winner's prev to winner's next
+                if (highscoreMapping[_winner].prev != address(0x0)) {
+                    highscoreMapping[highscoreMapping[_winner].prev].next = highscoreMapping[_winner].next;
+                }
+                // update winner connection
+                highscoreMapping[_winner].prev = highscoreMapping[currentPosition].prev;
+                highscoreMapping[_winner].next = currentPosition;
+
+                // update current connection
+                highscoreMapping[currentPosition].prev = _winner;
 
                 if (highscoreMapping[_winner].numberOfWins > highscoreMapping[highscoreHolder].numberOfWins) {
                     highscoreHolder = _winner;
@@ -83,14 +84,14 @@ contract HighscoreManager {
                 return;
             }
             currentPosition = highscoreMapping[currentPosition].next;
-        }   
+        }
+        
     }
 
     function getTop10() public view returns(address[10] memory, uint[10] memory){
         address[10] memory topTenAddresses;
         uint[10] memory topTenWins;
 
-        uint8 count = 0;
         address currPosition = highscoreHolder;
 
         for (uint i = 0 ; i < NUM_HIGH_SCORES; i++) {
