@@ -36,6 +36,8 @@ const App = {
       this.threeInARow.defaults({
         from: this.account
       });
+
+      this.refreshHighscore();
       
     } catch (error) {
       console.error("Could not connect to contract or chain.", error);
@@ -52,6 +54,19 @@ const App = {
     const gameManagerInstance = await gameManager.deployed();
     const top10 = await gameManagerInstance.getTop10();
     console.log(top10);
+
+    const highscoreRows = $('#highscore tr');
+    const highscoreTable = $('#highscore');
+
+    for (let i = 1; i < highscoreRows.length; i++) {
+      highscoreRows[i].remove();
+    }
+
+    top10[0].forEach((address, index) => {
+      highscoreTable.append("<tr><td>" + (index + 1) + "</td><td>" + address + "</td><td>" + top10[1][index] + "</td></tr>");
+    });
+
+    return top10;
   },
   createNewGame: async function() {
     const { gameManager, web3, threeInARow }  = this;
@@ -101,7 +116,7 @@ const App = {
         }
       }
     }
-    
+
     for (let r = 0; r < board.length; r++) {
       for (let c = 0; c < board[r].length; c++) {
         if ($("#board")[0].children[0].children[r].children[c].innerHTML == "") {
@@ -124,11 +139,26 @@ const App = {
     activeThreeInARowInstance.NextPlayer().on('data', (event) => {
       console.log(`next player event:`, event);
       if (event.args._player == self.activeAccount) {
-        console.log("Your turn!");
+        self.setStatus("Your turn!");
       } else {
-        console.log("Waiting for opponent");
+        self.setStatus("Waiting for opponent");
       }
       self.updateBoard(event.args._player == self.activeAccount);
+    });
+
+    activeThreeInARowInstance.GameOverWithWin().on('data', (event) => {
+      if (event.args._winner == self.activeAccount) {
+        self.setStatus("Congratuations, you are the winner!");
+      } else {
+        self.setStatus("Oh my! You lost!");
+      }
+      self.refreshHighscore();
+      self.updateBoard(false);
+    });
+
+    activeThreeInARowInstance.GameOverWithDraw().on('data', (event) => {
+      self.setStatus("Nobody won!");
+      self.updateBoard(false);
     })
   },
   setStatus: function(message) {
