@@ -4,11 +4,42 @@
     <title>ThreeInARow Game on the Blockchain</title>
   </head>
   <style>
+    #board {
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+    
+    #board td {
+      border: 1px solid;
+      width: 33.333%;
+      height: 33.333%;
+    }
   </style>
   <body>
     <h1>Three in a row game</h1>
     <h2>Decentralized App Game</h2>
     <div id="status"></div>
+
+    <table id="board">
+      <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
     
     <script src="index.js"></script>
   </body>
