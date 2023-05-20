@@ -40,6 +40,12 @@
         </tr>
       </tbody>
     </table>
+
+    <button onclick="App.createNewGame().then(txResult => document.getElementById('gameAddress').value = txResult.logs[0].args._game)">Create a new game</button>
+    <input type="text" placeholder="Game Address" id="gameAddress" size="50">
+    <br />
+    <button onclick="App.joinGame(document.getElementById('gameAddress').value)">Join a game</button>
+    <button onclick="App.setAccountTwo()">Select Account #2</button>
     
     <script src="index.js"></script>
   </body>

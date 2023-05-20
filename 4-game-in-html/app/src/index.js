@@ -67,6 +67,8 @@ const App = {
     })
 
     this.listenToEvents();
+
+    return txResult;
   },
   joinGame: async function(gameAddress) {
     const { web3, threeInARow } = this;
@@ -77,10 +79,16 @@ const App = {
 
     await this.activeThreeInARowInstance.joinGame({ from: this.accountTwo, value: web3.utils.toWei('0.1', 'ether') });
   },
-  setStone: async function(row, col) {
+  setStone: async function(event) {
+    console.log(event);
+    const { row, col } = event.data;
     await this.activeThreeInARowInstance.setStone(row, col);
+
+    const board = await this.activeThreeInARowInstance.getBoard();
+
+    $($("#board")[0].children[0].children[row].children[col]).off('click')
   },
-  updateBoard: async function() {
+  updateBoard: async function(clickable) {
     const board = await this.activeThreeInARowInstance.getBoard();
     console.log(board);
 
@@ -90,6 +98,21 @@ const App = {
           $("#board")[0].children[0].children[r].children[c].innerHTML = "X";
         } else if (board[r][c] != 0) {
           $("#board")[0].children[0].children[r].children[c].innerHTML = "O";
+        }
+      }
+    }
+    
+    for (let r = 0; r < board.length; r++) {
+      for (let c = 0; c < board[r].length; c++) {
+        if ($("#board")[0].children[0].children[r].children[c].innerHTML == "") {
+          const cell = $($("#board")[0].children[0].children[r].children[c]).off('click');
+          if (clickable) {
+            cell.click({
+              row: r,
+              col: c,
+              instance: this.activeThreeInARowInstance
+            }, App.setStone.bind(this));
+          }
         }
       }
     }
@@ -105,7 +128,7 @@ const App = {
       } else {
         console.log("Waiting for opponent");
       }
-      self.updateBoard();
+      self.updateBoard(event.args._player == self.activeAccount);
     })
   },
   setStatus: function(message) {
