@@ -38,6 +38,8 @@ const App = {
       });
 
       this.refreshHighscore();
+      this.gameStopped();
+      this.displayPlayerAddress();
       
     } catch (error) {
       console.error("Could not connect to contract or chain.", error);
@@ -48,6 +50,7 @@ const App = {
       from: this.accountTwo
     });
     this.activeAccount = this.accountTwo;
+    this.displayPlayerAddress();
   },
   refreshHighscore: async function() {
     const { gameManager } = this;
@@ -78,8 +81,10 @@ const App = {
 
     this.activeThreeInARowInstance.PlayerJoined().on('data', (event) => {
       console.log(`player joined event:`, event);
-      event.args._player;
     })
+
+    await this.resetBoard();
+    this.gameJoining();
 
     this.listenToEvents();
 
@@ -90,9 +95,68 @@ const App = {
 
     this.activeThreeInARowInstance = await threeInARow.at(gameAddress);
 
+    await this.resetBoard();
+
+    this.setPlayerAddress();
+
     this.listenToEvents();
 
     await this.activeThreeInARowInstance.joinGame({ from: this.accountTwo, value: web3.utils.toWei('0.1', 'ether') });
+  },
+  listenToEvents: async function() {
+    const { activeThreeInARowInstance, web3 }  = this;
+    const self = this;
+
+    activeThreeInARowInstance.NextPlayer().on('data', (event) => {
+      console.log(`next player event:`, event);
+      if (event.args._player == self.activeAccount) {
+        self.setStatus("Your turn!");
+      } else {
+        self.setStatus("Waiting for opponent");
+      }
+      self.updateBoard(event.args._player == self.activeAccount);
+      this.gameRunning();
+    });
+
+    activeThreeInARowInstance.GameOverWithWin().on('data', (event) => {
+      if (event.args._winner == self.activeAccount) {
+        self.setStatus("Congratuations, you are the winner!");
+      } else {
+        self.setStatus("Oh my! You lost!");
+      }
+      self.refreshHighscore();
+      self.updateBoard(false);
+      this.gameOver();
+    });
+
+    activeThreeInARowInstance.GameOverWithDraw().on('data', (event) => {
+      self.setStatus("Nobody won!");
+      self.updateBoard(false);
+      this.gameOver();
+    })
+  },
+  displayPlayerAddress: function() {
+    $('#playerAddress')[0].innerHTML = this.activeAccount;
+  },
+  gameStopped: function() {
+    $('.game-stopped').show();
+    $('.game-over').hide();
+    $('.game-running').hide();
+  },
+  gameRunning: function() {
+    $('.game-stopped').hide();
+    $('.game-over').hide();
+    $('.game-running').show();
+  },
+  gameJoining: function() {
+    $('.game-stopped').hide();
+    $('.game-over').show();
+    $('.game-running').hide();
+  },
+  gameOver: function() {
+    $('.game-stopped').hide();
+    $('.game-over').show();
+    $('.game-running').show();
   },
   setStone: async function(event) {
     console.log(event);
@@ -102,6 +166,15 @@ const App = {
     const board = await this.activeThreeInARowInstance.getBoard();
 
     $($("#board")[0].children[0].children[row].children[col]).off('click')
+  },
+  resetBoard: async function() {
+    const board = await this.activeThreeInARowInstance.getBoard();
+
+    for (let r = 0; r < board.length; r++) {
+      for (let c = 0; c < board[r].length; c++) {
+        $("#board")[0].children[0].children[r].children[c].innerHTML = "";
+      }
+    }
   },
   updateBoard: async function(clickable) {
     const board = await this.activeThreeInARowInstance.getBoard();
@@ -131,35 +204,6 @@ const App = {
         }
       }
     }
-  },
-  listenToEvents: async function() {
-    const { activeThreeInARowInstance, web3 }  = this;
-    const self = this;
-
-    activeThreeInARowInstance.NextPlayer().on('data', (event) => {
-      console.log(`next player event:`, event);
-      if (event.args._player == self.activeAccount) {
-        self.setStatus("Your turn!");
-      } else {
-        self.setStatus("Waiting for opponent");
-      }
-      self.updateBoard(event.args._player == self.activeAccount);
-    });
-
-    activeThreeInARowInstance.GameOverWithWin().on('data', (event) => {
-      if (event.args._winner == self.activeAccount) {
-        self.setStatus("Congratuations, you are the winner!");
-      } else {
-        self.setStatus("Oh my! You lost!");
-      }
-      self.refreshHighscore();
-      self.updateBoard(false);
-    });
-
-    activeThreeInARowInstance.GameOverWithDraw().on('data', (event) => {
-      self.setStatus("Nobody won!");
-      self.updateBoard(false);
-    })
   },
   setStatus: function(message) {
     const status = document.getElementById("status");
