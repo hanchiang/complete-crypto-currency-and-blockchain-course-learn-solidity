@@ -97,7 +97,7 @@ const App = {
 
     await this.resetBoard();
 
-    this.setPlayerAddress();
+    this.displayPlayerAddress();
 
     this.listenToEvents();
 

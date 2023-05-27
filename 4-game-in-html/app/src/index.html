@@ -141,7 +141,7 @@
                 </button>
                   <button
                     type="button"
-                    onclick="App.joinGame(document.getElementById('joinGameAddress').value)"
+                    onclick="joinGame(document.getElementById('joinGameAddress').value)"
                     class="btn btn-success"
                   >
                     Join a game
@@ -179,6 +179,11 @@
             .then(clipText => elements.forEach(element => element.value = clipText))
             .catch(console.log);
         }
+      }
+
+      function joinGame(gameAddress) {
+        App.joinGame(gameAddress)
+        document.getElementById("createdGameAddress").value = gameAddress;
       }
     </script>
   </body>

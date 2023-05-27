@@ -17,6 +17,6 @@
     "bootstrap-icons": "^1.10.5",
     "jquery": "^3.7.0",
     "truffle-contract": "^4.0.31",
-    "web3": "^1.2.4"
+    "web3": "^1.10.0"
   }
 }
