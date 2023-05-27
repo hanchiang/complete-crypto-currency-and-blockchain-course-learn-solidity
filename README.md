@@ -27,12 +27,18 @@ This project is an introduction to smart contract, integrating it with javascrip
 **non-incognito(metamask) and incognito window**
 ![localhost non-incognito and incognito window](https://i.imgur.com/vnTZZsL.gif)
 
-## Goerli testnet
-[Contract](https://goerli.etherscan.io/address/0x70bafdcb86bf63b9d2d0c0519d8cefd9ba166a8b)
-
 # Deploy to testnet
 * cd `4-game-in-html`
 * Create `.env` file with the following variables:
   * `MNEMONIC`: From ganache
   * `PROJECT_ID`: Create a project in [infura](https://www.infura.io/)
-* `truffle migrate --network goerli`
+* `truffle migrate --network sepolia`
+
+## Sepolia testnet
+**Contract**
+https://sepolia.etherscan.io/address/0x70bafdcb86bf63b9d2d0c0519d8cefd9ba166a8b
+
+**Faucet**
+https://www.infura.io/faucet/sepolia  
+https://sepoliafaucet.com/  
+https://faucets.chain.link/

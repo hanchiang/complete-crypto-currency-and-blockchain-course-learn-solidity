@@ -218,6 +218,7 @@ window.addEventListener("load", function() {
     // use MetaMask's provider
     App.web3 = new Web3(window.ethereum);
     window.ethereum.enable(); // get permission to access accounts
+    this.document.getElementById("selectAccount2").style.display = 'none';  // Do not show select account 2 if user is using a provider
   } else {
     console.warn(
       "No web3 detected. Falling back to http://127.0.0.1:8545. You should remove this fallback when you deploy live",
