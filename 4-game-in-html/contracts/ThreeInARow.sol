@@ -5,7 +5,7 @@ import { GameManager } from "./GameManager.sol";
 contract ThreeInARow {
     GameManager gameManager;
 
-    uint256 public gameCost = 0.1 ether;
+    uint256 public gameCost = 0.01 ether;
 
     address payable public player1;
     address payable public player2;
