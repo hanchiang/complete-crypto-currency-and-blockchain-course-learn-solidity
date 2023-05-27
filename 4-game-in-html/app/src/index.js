@@ -75,7 +75,7 @@ const App = {
     const { gameManager, web3, threeInARow }  = this;
 
     const gameManagerInstance = await gameManager.deployed();
-    const txResult = await gameManagerInstance.startNewGame({ value: web3.utils.toWei('0.1', 'ether') });
+    const txResult = await gameManagerInstance.startNewGame({ value: web3.utils.toWei('0.01', 'ether') });
     console.log(txResult);
     this.activeThreeInARowInstance = await threeInARow.at(txResult.logs[0].args._game);
 
@@ -101,7 +101,7 @@ const App = {
 
     this.listenToEvents();
 
-    await this.activeThreeInARowInstance.joinGame({ from: this.accountTwo, value: web3.utils.toWei('0.1', 'ether') });
+    await this.activeThreeInARowInstance.joinGame({ from: this.accountTwo, value: web3.utils.toWei('0.01', 'ether') });
   },
   listenToEvents: async function() {
     const { activeThreeInARowInstance, web3 }  = this;
