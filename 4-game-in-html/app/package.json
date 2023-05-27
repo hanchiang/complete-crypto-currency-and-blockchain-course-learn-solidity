@@ -4,8 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack-dev-server"
+    "build": "./node_modules/webpack/bin/webpack.js",
+    "dev": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.5",
