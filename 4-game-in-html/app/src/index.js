@@ -218,6 +218,15 @@ window.addEventListener("load", function() {
     // use MetaMask's provider
     App.web3 = new Web3(window.ethereum);
     window.ethereum.enable(); // get permission to access accounts
+
+    window.ethereum.on("chainChanged", () => {
+      window.location.reload();
+    });
+
+    window.ethereum.on('accountsChanged', () => {
+      window.location.reload();
+    });
+
     this.document.getElementById("selectAccount2").style.display = 'none';  // Do not show select account 2 if user is using a provider
   } else {
     console.warn(
