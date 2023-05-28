@@ -13,6 +13,7 @@ const App = {
   gameManager: null,
   threeInARow: null,
   activeThreeInARowInstance: null,
+  isLocalhost: true,
 
   start: async function() {
     const { web3 } = this;
@@ -26,9 +27,10 @@ const App = {
 
       // get accounts
       const accounts = await web3.eth.getAccounts();
+      console.log(accounts)
       this.account = accounts[0];
       this.activeAccount = this.account;
-      this.accountTwo = accounts[1];
+      this.accountTwo = isLocalhost ? accounts[1] : accounts[0];
 
       this.gameManager.defaults({
         from: this.account
@@ -227,6 +229,7 @@ window.addEventListener("load", function() {
       window.location.reload();
     });
 
+    this.isLocalhost = false;
     this.document.getElementById("selectAccount2").style.display = 'none';  // Do not show select account 2 if user is using a provider
   } else {
     console.warn(
