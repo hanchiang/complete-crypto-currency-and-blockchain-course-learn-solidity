@@ -9,6 +9,9 @@ Each player pays 0.01 ether to play the game. The winner takes the money. If the
   * [contracts/](4-game-in-html/contracts): Smart contracts
   * [app/](4-game-in-html/app): The frontend code
 
+# Design
+![Design](images/web3-tic-tac-toe-game.png)
+
 # Local development
 * Install ganache: `npm install -g ganache-cli`
 * Install truffle: `npm install-g truffle`
