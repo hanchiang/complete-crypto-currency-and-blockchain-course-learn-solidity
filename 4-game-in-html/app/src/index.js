@@ -215,18 +215,18 @@ const App = {
 
 window.App = App;
 
-window.addEventListener("load", function() {
+window.addEventListener("load", async function() {
   if (window.ethereum) {
     // use MetaMask's provider
     App.web3 = new Web3(window.ethereum);
-    window.ethereum.enable(); // get permission to access accounts
+    await window.ethereum.enable(); // get permission to access accounts
 
-    const chainIdHex = web3.currentProvider.chainId;
+    const chainIdHex = App.web3.currentProvider.chainId;
     const sepoliaIdHex = '0xaa36a7';
     if (chainIdHex !== sepoliaIdHex) {
       console.log('wrong network');
       try {
-        web3.currentProvider.request({
+        await App.web3.currentProvider.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: sepoliaIdHex }]
         });
@@ -245,7 +245,7 @@ window.addEventListener("load", function() {
     });
 
     this.isLocalhost = false;
-    this.document.getElementById("selectAccount2").style.display = 'none';  // Do not show select account 2 if user is using a provider
+    document.getElementById("selectAccount2").style.display = 'none';  // Do not show select account 2 if user is using a provider
   } else {
     console.warn(
       "No web3 detected. Falling back to http://127.0.0.1:8545. You should remove this fallback when you deploy live",
