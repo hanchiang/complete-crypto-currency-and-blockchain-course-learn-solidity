@@ -30,7 +30,7 @@ const App = {
       console.log(accounts)
       this.account = accounts[0];
       this.activeAccount = this.account;
-      this.accountTwo = isLocalhost ? accounts[1] : accounts[0];
+      this.accountTwo = this.isLocalhost ? accounts[1] : accounts[0];
 
       this.gameManager.defaults({
         from: this.account
