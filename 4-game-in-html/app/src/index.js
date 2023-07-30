@@ -221,6 +221,21 @@ window.addEventListener("load", function() {
     App.web3 = new Web3(window.ethereum);
     window.ethereum.enable(); // get permission to access accounts
 
+    const chainIdHex = web3.currentProvider.chainId;
+    const sepoliaIdHex = '0xaa36a7';
+    if (chainIdHex !== sepoliaIdHex) {
+      console.log('wrong network');
+      try {
+        web3.currentProvider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: sepoliaIdHex }]
+        });
+      } catch (error) {
+        console.log(error);
+        alert(error.message);
+      }
+    }
+
     window.ethereum.on("chainChanged", () => {
       window.location.reload();
     });

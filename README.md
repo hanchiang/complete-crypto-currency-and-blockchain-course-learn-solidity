@@ -27,6 +27,7 @@ Each player pays 0.01 ether to play the game. The winner takes the money. If the
 # Demo - localhost
 **2 incognito windows**
 ![localhost 2 incognito window](https://i.imgur.com/tex1lVu.gif)
+
 **non-incognito(metamask) and incognito window**
 ![localhost non-incognito and incognito window](https://i.imgur.com/vnTZZsL.gif)
 
