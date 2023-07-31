@@ -5,7 +5,7 @@ import { GameManager } from "./GameManager.sol";
 contract ThreeInARow {
     GameManager gameManager;
 
-    uint256 public gameCost = 0.1 ether;
+    uint256 public gameCost = 0.01 ether;
 
     address payable public player1;
     address payable public player2;
@@ -26,7 +26,7 @@ contract ThreeInARow {
     uint balanceToWithdrawPlayer2;
 
     uint gameValidUntil;
-    uint timeToReact = 3 minutes;
+    uint timeToReact = 10 minutes;
 
     constructor(address _gameManager, address payable _player1) public payable {
         gameManager = GameManager(_gameManager);
