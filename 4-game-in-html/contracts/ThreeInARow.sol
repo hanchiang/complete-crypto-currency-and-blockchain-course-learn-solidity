@@ -26,7 +26,7 @@ contract ThreeInARow {
     uint balanceToWithdrawPlayer2;
 
     uint gameValidUntil;
-    uint timeToReact = 3 minutes;
+    uint timeToReact = 10 minutes;
 
     constructor(address _gameManager, address payable _player1) public payable {
         gameManager = GameManager(_gameManager);
