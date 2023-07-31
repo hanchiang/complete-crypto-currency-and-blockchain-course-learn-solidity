@@ -8,12 +8,15 @@
     "dev": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.9",
+    "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^5.0.5",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@truffle/contract": "^4.6.27",
     "bootstrap-icons": "^1.10.5",
     "jquery": "^3.7.0",
     "truffle-contract": "^4.0.31",

@@ -1,6 +1,6 @@
 import Web3 from "web3";
 import $ from "jquery";
-import contract from "truffle-contract"
+import contract from "@truffle/contract"
 
 import gameManagerArtifact from "../../build/contracts/GameManager.json"
 import threeInARowArtifact from "../../build/contracts/ThreeInARow.json"
@@ -244,7 +244,7 @@ window.addEventListener("load", async function() {
       window.location.reload();
     });
 
-    this.isLocalhost = false;
+    App.isLocalhost = false;
     document.getElementById("selectAccount2").style.display = 'none';  // Do not show select account 2 if user is using a provider
   } else {
     console.warn(
