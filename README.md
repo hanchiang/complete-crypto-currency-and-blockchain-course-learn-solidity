@@ -10,7 +10,7 @@ Each player pays 0.01 ether to play the game. The winner takes the money. If the
   * [app/](4-game-in-html/app): The frontend code
 
 # Design
-![Design](images/web3-tic-tac-toe-game.png)
+![Design](images/web3-tic-tac-toe-game-diagram.png)
 
 # Local development
 * Install ganache: `npm install -g ganache-cli`
@@ -34,8 +34,8 @@ Each player pays 0.01 ether to play the game. The winner takes the money. If the
 # Demo - sepolia testnet
 [Try it here](https://hanchiang.github.io/complete-crypto-currency-and-blockchain-course-learn-solidity/)
 
-**Using google chrome and firefox**
-![Sepolia testnet](https://i.imgur.com/srHi7kN.gif)
+**Using 2 google chrome browsers**
+[![Sepolia testnet](images/web3-tic-tac-toe-screenshot.png)](https://i.imgur.com/zHB1rd8.mp4)
 
 
 ## Sepolia testnet
